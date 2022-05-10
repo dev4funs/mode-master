@@ -1,0 +1,74 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #666666;
+}
+
+.title {
+  color: white;
+}
+
+.function-buttons {
+  flex-direction: row;
+}
+
+.sequencer {
+  height: 100%;
+  display: flex;
+}
+.key-column {
+  display: flex;
+  flex-direction: column;
+}
+.row-key {
+  height: 40px;
+  width: 40px;
+  color: white;
+  margin: 4px;
+  line-height: 40px;
+}
+.note-wrapper {
+  height: 100%;
+  display: flex;
+}
+
+.note-column {
+  display: flex;
+  flex-direction: column;
+}
+.note-column--active {
+  background: #228822;
+}
+.note {
+  height: 40px;
+  width: 40px;
+  color: #858585;
+  background: #858585;
+  border: 2px solid #ccc;
+  border-radius: 2px;
+  margin: 4px;
+  cursor: pointer;
+}
+.note--active {
+  color: white;
+  background: #ef8a8c;
+}
+.note:active {
+  background: lightgrey;
+}
+
+.play-button {
+  padding: 0.5rem 1.5rem;
+  text-transform: uppercase;
+  margin: 1rem auto;
+  border: 2px solid #ef8a8c;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
