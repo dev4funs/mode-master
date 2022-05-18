@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import * as Tone from "tone";
 import classNames from "classnames";
-
+import { KEYS, MODELS } from "./static";
 // Function which creates a 5x8 grid,
 // with our chosen notes on the vertical axis
 function GenerateGrid() {
@@ -20,7 +20,7 @@ function GenerateGrid() {
       { note: "D#", isActive: false },
       { note: "D", isActive: false },
       { note: "C#", isActive: false },
-      { note: "C", isActive: false }
+      { note: "C", isActive: false },
     ];
     grid.push(column);
   }
@@ -43,6 +43,9 @@ export default function App() {
 
   // Used to visualize which column is making sound
   const [currentColumn, setCurrentColumn] = useState(null);
+
+  //string to handle the key of sequencer
+  const [key, setKey] = useState("C");
 
   // Updates our Grid's state
   // Written to be intelligble, not performant
@@ -118,6 +121,10 @@ export default function App() {
     await Tone.Transport.start();
   };
 
+  useEffect(() => {
+    console.log(key);
+  }, [key]);
+
   return (
     <div className="App">
       <div className="header">
@@ -125,7 +132,22 @@ export default function App() {
           <h1>Mode Master</h1>
         </div>
         <div className="function-buttons">
-          <button className="play-button" onClick={() => {}}>
+          <label className="key-selector-label">Key</label>
+          <select
+            name="key"
+            id="key"
+            className="key-selector"
+            onChange={(e) => {
+              setKey(e.target.value);
+            }}
+          >
+            {KEYS.map((_key) => (
+              <option value={_key} key={`key-${_key}`}>
+                {_key}
+              </option>
+            ))}
+          </select>
+          <button className="generate-button" onClick={() => {}}>
             Generate
           </button>
           <button className="play-button" onClick={() => PlayMusic()}>
@@ -145,7 +167,7 @@ export default function App() {
         {grid.map((column, columnIndex) => (
           <div
             className={classNames("note-column", {
-              "note-column--active": currentColumn === columnIndex
+              "note-column--active": currentColumn === columnIndex,
             })}
             key={columnIndex + "column"}
           >

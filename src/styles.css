@@ -14,9 +14,6 @@
   color: white;
 }
 
-.function-buttons {
-  flex-direction: row;
-}
 
 .sequencer {
   height: 100%;
@@ -61,6 +58,39 @@
 }
 .note:active {
   background: lightgrey;
+}
+
+.function-buttons {
+  flex-direction: row;
+  width: 816px;
+}
+
+
+.key-selector-label{
+  color:white;
+  margin-right: 10px;
+  font-size: 25px;
+}
+
+.key-selector {
+  padding: 0.5rem 1.5rem;
+  text-transform: uppercase;
+  margin: 1rem auto;
+  border: 2px solid #ef8a8c;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.generate-button{
+  padding: 0.5rem 1.5rem;
+  text-transform: uppercase;
+  margin: 1rem auto;
+  border: 2px solid #ef8a8c;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto
+
 }
 
 .play-button {
