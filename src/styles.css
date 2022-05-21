@@ -30,6 +30,15 @@
   margin: 4px;
   line-height: 40px;
 }
+
+.row-key-onMode{
+  height: 40px;
+  width: 40px;
+  color: white;
+  margin: 4px;
+  line-height: 40px;
+
+}
 .note-wrapper {
   height: 100%;
   display: flex;
@@ -69,7 +78,7 @@
 .key-selector-label{
   color:white;
   margin-right: 10px;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .key-selector {
