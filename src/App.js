@@ -11,9 +11,6 @@ import classNames from "classnames";
 import { KEYS, MODELS } from "./static";
 import { Description, NoteButton, Selector } from "./components";
 import _ from "lodash";
-Array.prototype.sample = function () {
-  return this[Math.floor(Math.random() * this.length)];
-};
 
 const DEFAULT_BPM = 90;
 // Function which creates a 12x16 grid,
@@ -36,10 +33,11 @@ const DEFAULT_NOTES = [
 ].map((key) => key + DEFAULT_OCTAVE);
 
 function GenerateGrid(notes) {
+  const _notes = notes.concat().reverse();
+
   const grid = [];
-  console.log("show notes");
   for (let i = 0; i < 16; i++) {
-    grid.push(notes.map((note) => ({ note: note, isActive: false })));
+    grid.push(_notes.map((note) => ({ note: note, isActive: false })));
   }
   return grid;
 }
@@ -91,22 +89,18 @@ export default function App() {
   const notes = useMemo(() => {
     const startIndex = KEYS.findIndex((item) => key === item);
     const notesWithOctave = KEYS.slice(startIndex).map((note) => note + octave);
-
     const octavePlusOne = parseInt(octave) + 1;
-    console.log("octave", typeof octavePlusOne);
     const notesWithOctavePlusOne = KEYS.slice(0, startIndex).map(
       (note) => note + octavePlusOne
     );
-    // return notesWithOctave.concat(notesWithOctavePlusOne).reverse();
     return notesWithOctave.concat(notesWithOctavePlusOne);
   }, [key, octave]);
 
   const notesOnMode = useMemo(() => {
     let index = 0;
-    const _notes = notes.reverse();
     const _notesOnMode = [];
     for (const interval of MODELS[mode]) {
-      _notesOnMode.push(_notes[index]);
+      _notesOnMode.push(notes[index]);
       if (interval === "Whole") {
         index += 2;
       } else if (interval === "Half") {
@@ -194,13 +188,16 @@ export default function App() {
   };
 
   const generateNotesBasedOnMode = useCallback(() => {
-    const _notes = notesOnMode;
-
+    console.log("notesOnMode", notesOnMode);
+    const notesOnModeWithNoRoot = notesOnMode.slice(1, notesOnMode.length);
+    console.log("notesOnModeWithNoRoot", notesOnModeWithNoRoot);
+    const _notes = _.sampleSize(notesOnModeWithNoRoot, noteCount - 1);
+    _notes.push(notesOnMode[0]);
     const newGrid = GenerateGrid(notes);
     console.log(newGrid);
     const newNotes = [];
     for (let i = 0; i < 16; i++) {
-      const randomNote = _notes.sample();
+      const randomNote = _.sample(_notes);
       if (randomNote !== "*") {
         const findIndex = newGrid[i].findIndex(
           ({ note }) => note === randomNote
@@ -210,7 +207,7 @@ export default function App() {
       newNotes.push(randomNote);
     }
     setGrid(newGrid);
-  }, [notesOnMode, notes]);
+  }, [notesOnMode, notes, noteCount]);
 
   return (
     <div className="App">
@@ -297,16 +294,19 @@ export default function App() {
 
       <div className="sequencer">
         <div className="key-column">
-          {notes.map((note) => (
-            <div
-              key={`key+${note}`}
-              className={
-                notesOnMode.includes(note) ? "row-key-onMode" : "row-key"
-              }
-            >
-              {note}
-            </div>
-          ))}
+          {notes
+            .concat()
+            .reverse()
+            .map((note) => (
+              <div
+                key={`key+${note}`}
+                className={
+                  notesOnMode.includes(note) ? "row-key-onMode" : "row-key"
+                }
+              >
+                {note}
+              </div>
+            ))}
         </div>
         {grid.map((column, columnIndex) => (
           <div

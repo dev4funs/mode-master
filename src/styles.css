@@ -97,6 +97,7 @@
 .function-sliders{
   margin-top: 35px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .slider-wraper{
