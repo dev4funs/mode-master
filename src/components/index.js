@@ -1,3 +1,4 @@
 import Description from "./description";
 import NoteButton from "./noteButton";
-export { Description, NoteButton };
+import Selector from "./selector";
+export { Description, NoteButton, Selector };

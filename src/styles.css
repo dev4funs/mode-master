@@ -1,23 +1,32 @@
 .App {
   font-family: sans-serif;
-  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
   background-color: #666666;
+  align-items: center;
 }
+
 
 .title {
   color: white;
+  text-align: center;
 }
 
+.function{
+  display: flex;
+  width: 800px;
+  flex-direction: column;
+  align-self: center;
+}
 
 .sequencer {
   height: 100%;
   display: flex;
+  text-align: center;
+  align-self: center;
+  margin: 30px;
 }
 .key-column {
   display: flex;
@@ -37,8 +46,8 @@
   color: white;
   margin: 4px;
   line-height: 40px;
-
 }
+
 .note-wrapper {
   height: 100%;
   display: flex;
@@ -70,44 +79,70 @@
 }
 
 .function-buttons {
+  display: flex;
   flex-direction: row;
-  width: 816px;
+
 }
 
 
-.key-selector-label{
-  color:white;
+
+.action-button{
+  padding: 0.5rem 1.5rem;
+  border: 2px solid #ef8a8c;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 25px;
+}
+
+.function-sliders{
+  margin-top: 35px;
+  display: flex;
+}
+
+.slider-wraper{
+  display: flex;
+  flex-direction: row;
+  color: white;
+  line-height: 20px;
+  margin-right: 20px;
+}
+
+.slider-wraper:last-of-type{
+  margin-right: 0;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 250px;
+  height: 20px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
   margin-right: 10px;
-  font-size: 20px;
 }
 
-.key-selector {
-  padding: 0.5rem 1.5rem;
-  text-transform: uppercase;
-  margin: 1rem auto;
-  border: 2px solid #ef8a8c;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
+.slider:hover {
+  opacity: 1;
 }
 
-.generate-button{
-  padding: 0.5rem 1.5rem;
-  text-transform: uppercase;
-  margin: 1rem auto;
-  border: 2px solid #ef8a8c;
-  border-radius: 4px;
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #04AA6D;
   cursor: pointer;
-  margin-left: auto
-
 }
 
-.play-button {
-  padding: 0.5rem 1.5rem;
-  text-transform: uppercase;
-  margin: 1rem auto;
-  border: 2px solid #ef8a8c;
-  border-radius: 4px;
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #04AA6D;
   cursor: pointer;
-  margin-right: 5px;
+}
+
+.slider-label{
+  align-self: center;
 }

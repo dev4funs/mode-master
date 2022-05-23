@@ -7,7 +7,7 @@ const Description = () => {
       <div>Description</div>
       <div>
         {Object.keys(MODELS).map((item, i) => (
-          <div key={i}>
+          <div key={i} className="discription-row">
             <div>{item}:</div>
             <div>intervals:{MODELS[item].join("-")}</div>
           </div>

@@ -9,12 +9,13 @@ import "./styles.css";
 import * as Tone from "tone";
 import classNames from "classnames";
 import { KEYS, MODELS } from "./static";
-import { Description, NoteButton } from "./components";
-
+import { Description, NoteButton, Selector } from "./components";
+import _ from "lodash";
 Array.prototype.sample = function () {
   return this[Math.floor(Math.random() * this.length)];
 };
 
+const DEFAULT_BPM = 90;
 // Function which creates a 12x16 grid,
 // with our chosen notes on the vertical axis
 const DEFAULT_OCTAVE = 4;
@@ -43,11 +44,16 @@ function GenerateGrid(notes) {
   return grid;
 }
 
-Tone.Transport.bpm.value = 70;
+Tone.Transport.bpm.value = DEFAULT_BPM;
 
 //Notice the new PolySynth in use here, to support multiple notes at once
 const synth = new Tone.PolySynth().toDestination();
 // Our chosen octave for our five notes. Try changing this for higher or lower notes
+
+const setToneBpm = _.debounce((bpm) => {
+  console.log("show bpm", bpm, typeof bpm);
+  Tone.Transport.bpm.value = bpm;
+}, 600);
 
 export default function App() {
   // Sequencer ref for Sequencer Object
@@ -71,6 +77,16 @@ export default function App() {
 
   // Used to visualize which column is making sound
   const [currentColumn, setCurrentColumn] = useState(null);
+
+  // Used to control BPM
+  const [bpm, setBpm] = useState(DEFAULT_BPM);
+
+  const [noteCount, setNoteCount] = useState(7);
+
+  const bpmSliderHandler = (e) => {
+    setBpm(e.target.value);
+    setToneBpm(e.target.value);
+  };
 
   const notes = useMemo(() => {
     const startIndex = KEYS.findIndex((item) => key === item);
@@ -178,7 +194,6 @@ export default function App() {
   };
 
   const generateNotesBasedOnMode = useCallback(() => {
-    // const _notes = notesOnMode.concat(["*", "*"]);
     const _notes = notesOnMode;
 
     const newGrid = GenerateGrid(notes);
@@ -195,7 +210,7 @@ export default function App() {
       newNotes.push(randomNote);
     }
     setGrid(newGrid);
-  }, [notesOnMode]);
+  }, [notesOnMode, notes]);
 
   return (
     <div className="App">
@@ -203,67 +218,80 @@ export default function App() {
         <div className="title">
           <h1>Mode Master</h1>
         </div>
-        <div className="function-buttons">
-          <label className="key-selector-label">Key</label>
-          <select
-            name="key"
-            id="key"
-            className="key-selector"
-            onChange={(e) => {
-              if (isPlaying) PlayMusic();
-              setKey(e.target.value);
-            }}
-          >
-            {KEYS.map((_key) => (
-              <option value={_key} key={`key-${_key}`}>
-                {_key}
-              </option>
-            ))}
-          </select>
-          <label className="key-selector-label">Octave</label>
-          <select
-            name="Octave"
-            id="Octave"
-            className="key-selector"
-            defaultValue={DEFAULT_OCTAVE}
-            onChange={(e) => {
-              if (isPlaying) PlayMusic();
-              setOctave(e.target.value);
-            }}
-          >
-            {[1, 2, 3, 4, 5, 6, 7].map((octave) => (
-              <option value={octave} key={`key-${octave}`}>
-                {octave}
-              </option>
-            ))}
-          </select>
+        <div className="function">
+          <div className="function-buttons">
+            <Selector
+              label="Key"
+              options={KEYS}
+              onChange={(e) => {
+                if (isPlaying) PlayMusic();
+                setKey(e.target.value);
+              }}
+            />
 
-          <label className="key-selector-label">Mode</label>
-          <select
-            name="mode"
-            id="mode"
-            className="key-selector"
-            defaultValue={"Ionian"}
-            onChange={(e) => {
-              if (isPlaying) PlayMusic();
-              setMode(e.target.value);
-            }}
-          >
-            {Object.keys(MODELS).map((_mode) => (
-              <option value={_mode} key={`key-${_mode}`}>
-                {_mode}
-              </option>
-            ))}
-          </select>
-          <button
-            className="generate-button"
-            onClick={generateNotesBasedOnMode}
-          >
-            Generate
-          </button>
-          <button className="play-button" onClick={PlayMusic}>
-            {isPlaying ? "Stop" : "Play"}
-          </button>
+            <Selector
+              label="Octave"
+              options={[1, 2, 3, 4, 5, 6, 7]}
+              defaultValue={DEFAULT_OCTAVE}
+              onChange={(e) => {
+                if (isPlaying) PlayMusic();
+                setOctave(e.target.value);
+              }}
+            ></Selector>
+
+            <Selector
+              label="Mode"
+              defaultValue={"Ionian"}
+              onChange={(e) => {
+                if (isPlaying) PlayMusic();
+                setMode(e.target.value);
+              }}
+            >
+              {Object.keys(MODELS).map((_mode) => (
+                <option value={_mode} key={`key-${_mode}`}>
+                  {_mode}
+                </option>
+              ))}
+            </Selector>
+
+            <button
+              className="action-button"
+              onClick={generateNotesBasedOnMode}
+            >
+              Generate
+            </button>
+            <button className="action-button" onClick={PlayMusic}>
+              {isPlaying ? "Stop" : "Play"}
+            </button>
+          </div>
+          <div className="function-sliders">
+            <div className="slider-wraper">
+              <input
+                type="range"
+                min="1"
+                max="7"
+                value={noteCount}
+                className="slider"
+                id="Notes number"
+                onChange={(e) => {
+                  setNoteCount(e.target.value);
+                }}
+              />
+              <div className="slider-label">Note Number: {noteCount}</div>
+            </div>
+            <div className="slider-wraper">
+              <input
+                type="range"
+                min="40"
+                max="200"
+                value={bpm}
+                className="slider"
+                id="BPM"
+                onChange={bpmSliderHandler}
+              />
+              <div className="slider-label">BPM: {bpm}</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -299,16 +327,7 @@ export default function App() {
         ))}
       </div>
 
-      <Description />
+      {/* <Description /> */}
     </div>
   );
 }
-
-// const NoteButton = ({ note, isActive, ...rest }) => {
-//   const classes = isActive ? "note note--active" : "note";
-//   return (
-//     <button className={classes} {...rest}>
-//       {note}
-//     </button>
-//   );
-// };

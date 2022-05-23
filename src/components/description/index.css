@@ -1,3 +1,7 @@
 .description-container{
   color: white;
 }
+
+.discription-row{
+  flex-direction: row;
+}
