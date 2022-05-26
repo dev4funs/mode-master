@@ -195,6 +195,29 @@ export default function App() {
     _notes.push(notesOnMode[0]);
     const newGrid = GenerateGrid(notes);
     console.log(newGrid);
+    switch (mode) {
+      case "Ionian":
+        _notes.push(notesOnMode[3]);
+        break;
+      case "Dorian":
+        _notes.push(notesOnMode[1]);
+        break;
+      case "Phrygian":
+        _notes.push(notesOnMode[2]);
+        break;
+      case "Lydian":
+        _notes.push(notesOnMode[3]);
+        break;
+      case "Mixolydian":
+        _notes.push(notesOnMode[4]);
+        break;
+      case "Aeolian":
+        _notes.push(notesOnMode[5]);
+        break;
+      case "Locrian":
+        _notes.push(notesOnMode[6]);
+        break;
+    }
     const newNotes = [];
     for (let i = 0; i < 16; i++) {
       const randomNote = _.sample(_notes);
@@ -207,7 +230,7 @@ export default function App() {
       newNotes.push(randomNote);
     }
     setGrid(newGrid);
-  }, [notesOnMode, notes, noteCount]);
+  }, [notesOnMode, notes, noteCount, mode]);
 
   return (
     <div className="App">
@@ -257,7 +280,11 @@ export default function App() {
             >
               Generate
             </button>
-            <button className="action-button" onClick={PlayMusic}>
+            <button
+              className="action-button"
+              styles={{ "mid-width": "78px" }}
+              onClick={PlayMusic}
+            >
               {isPlaying ? "Stop" : "Play"}
             </button>
           </div>
@@ -304,6 +331,7 @@ export default function App() {
                   notesOnMode.includes(note) ? "row-key-onMode" : "row-key"
                 }
               >
+                {notesOnMode.includes(note) ? "*" : ""}
                 {note}
               </div>
             ))}

@@ -81,23 +81,21 @@
 .function-buttons {
   display: flex;
   flex-direction: row;
-
+  justify-content: space-between;
 }
-
-
 
 .action-button{
   padding: 0.5rem 1.5rem;
   border: 2px solid #ef8a8c;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 25px;
 }
 
 .function-sliders{
   margin-top: 35px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .slider-wraper{
